@@ -16,19 +16,19 @@ import java.util.List;
  * @date 2021/3/17
  */
 @Slf4j
-public class JacksonUtils {
+public class JacksonUtil {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             //忽略未知的字段
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    private JacksonUtils() {
+    private JacksonUtil() {
     }
 
     public static <T> T fromJson(String json, Class<T> type) {
         try {
             return OBJECT_MAPPER.readValue(json, type);
         } catch (Exception e) {
-            log.error("JacksonUtils fromJson error", e);
+            log.error("JacksonUtil fromJson error", e);
             return null;
         }
     }
@@ -38,7 +38,7 @@ public class JacksonUtils {
         try {
             return OBJECT_MAPPER.readValue(json, typeFactory.constructCollectionType(List.class, type));
         } catch (Exception e) {
-            log.error("JacksonUtils fromJsonToList error", e);
+            log.error("JacksonUtil fromJsonToList error", e);
             return null;
         }
     }
@@ -47,7 +47,7 @@ public class JacksonUtils {
         try {
             return OBJECT_MAPPER.writeValueAsString(object);
         } catch (Exception e) {
-            log.error("JacksonUtils toJson error", e);
+            log.error("JacksonUtil toJson error", e);
             return null;
         }
     }
@@ -56,7 +56,7 @@ public class JacksonUtils {
         try {
             return OBJECT_MAPPER.readTree(json);
         } catch (Exception e) {
-            log.error("JacksonUtils readTree error", e);
+            log.error("JacksonUtil readTree error", e);
             return null;
         }
     }
@@ -79,7 +79,7 @@ public class JacksonUtils {
             return (ArrayNode) node;
         }
 
-        log.error(String.format("JacksonUtils readTreeAsArray error.json:%s", json));
+        log.error(String.format("JacksonUtil readTreeAsArray error.json:%s", json));
         return null;
     }
 
