@@ -1,0 +1,14 @@
+*.class
+.DS_Store
+application.pid
+
+
+# Package Files #
+*.jar
+*.war
+
+target
+
+# Idea
+.idea
+*.iml
