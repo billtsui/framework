@@ -1,5 +1,6 @@
 package person.billtsui.framework.module.component;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -9,9 +10,7 @@ import person.billtsui.framework.module.Interceptor;
 import person.billtsui.framework.module.Loader;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author billtsui
@@ -54,10 +53,35 @@ public class ComponentManager implements ApplicationListener<ContextRefreshedEve
         return (Loader<P, R>) this.find(name, loaderMap);
     }
 
+    public <P, R> List<Loader<P, R>> getLoaders(List<LoaderConfig> loaderConfigList) {
+        if (CollectionUtils.isEmpty(loaderConfigList)) {
+            return Collections.emptyList();
+        }
+
+        List<Loader<P, R>> result = new ArrayList<>();
+        for (LoaderConfig loaderConfig : loaderConfigList) {
+            result.add(getLoader(loaderConfig.getName()));
+        }
+        return result;
+    }
+
     @SuppressWarnings("unchecked")
     @Nonnull
     public <P extends ModuleParam, R> Interceptor<P, R> getInterceptor(String name) {
         return (Interceptor<P, R>) this.find(name, interceptorMap);
+    }
+
+    public <P extends ModuleParam, R> List<Interceptor<P, R>> getInterceptors(List<String> names) {
+        if (CollectionUtils.isEmpty(names)) {
+            return Collections.emptyList();
+        }
+
+        List<Interceptor<P, R>> result = new ArrayList<>();
+        names.forEach(name -> {
+            result.add(this.getInterceptor(name));
+        });
+
+        return result;
     }
 
     private <T> T find(String name, Map<String, T> map) {

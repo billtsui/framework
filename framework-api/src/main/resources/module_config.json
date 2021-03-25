@@ -3,6 +3,7 @@
     "name": "Hello",
     "processors": [
       {
+        "name:":"",
         "loaders": [
           {
             "name": "HotelLoader",

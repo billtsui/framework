@@ -7,13 +7,17 @@ import person.billtsui.framework.module.component.ModuleParam;
  * @date 2021/3/22
  */
 public interface Interceptor<P extends ModuleParam, R> {
+
     /**
      * 前置拦截器
+     * @param param
      */
-    void beforeProcess();
+    void beforeProcess(P param);
 
     /**
      * 后置拦截器
+     * @param param
+     * @param result
      */
-    void afterProcess();
+    void afterProcess(P param, R result);
 }
