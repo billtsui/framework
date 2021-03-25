@@ -8,7 +8,7 @@ import java.util.Optional;
  * @author billtsui
  * @date 2021/3/23
  */
-public abstract class AbstractModuleServiceProcessor<P extends ParentParam, R> implements ModuleServiceProcessor<P, R> {
+public abstract class AbstractModuleServiceProcessor<P extends ModuleParam, R> implements ModuleServiceProcessor<P, R> {
 
     @Autowired
     private ComponentManager componentManager;

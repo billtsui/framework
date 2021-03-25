@@ -9,6 +9,7 @@ import person.billtsui.framework.common.utils.JacksonUtil;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 @Component
 public class ModuleManager {
-    private Map<String, ModuleConfig> moduleConfigMap;
+    private Map<String, ModuleConfig> moduleConfigMap = new HashMap<>();
 
     @Value("classpath:module_config.json")
     private Resource moduleConfigJson;
@@ -30,14 +31,9 @@ public class ModuleManager {
     private void initModuleConfig() throws IOException {
         String json = new String(moduleConfigJson.getInputStream().readAllBytes());
         List<ModuleConfig> moduleConfigList = JacksonUtil.fromJsonToList(json, ModuleConfig.class);
-
         if (CollectionUtils.isNotEmpty(moduleConfigList)) {
-            moduleConfigList.forEach(moduleConfig -> {
-                moduleConfigMap.put(moduleConfig.getName(), moduleConfig);
-                moduleConfig.getProcessors().forEach(processorConfig -> processorConfig.setModule(moduleConfig.getName()));
-            });
+            moduleConfigList.forEach(moduleConfig -> moduleConfigMap.put(moduleConfig.getName(), moduleConfig));
         }
-
     }
 
     public ModuleConfig getModule(String moduleName) {

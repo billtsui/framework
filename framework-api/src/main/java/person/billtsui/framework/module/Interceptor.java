@@ -1,21 +1,19 @@
 package person.billtsui.framework.module;
 
-import person.billtsui.framework.module.component.ParentParam;
+import person.billtsui.framework.module.component.ModuleParam;
 
 /**
  * @author billtsui
  * @date 2021/3/22
  */
-public interface Interceptor<P extends ParentParam, R> {
+public interface Interceptor<P extends ModuleParam, R> {
     /**
      * 前置拦截器
-     * 在执行execute前执行
      */
-    void beforeExecute();
+    void beforeProcess();
 
     /**
      * 后置拦截器
-     * 在执行execute后执行
      */
-    void afterExecute();
+    void afterProcess();
 }

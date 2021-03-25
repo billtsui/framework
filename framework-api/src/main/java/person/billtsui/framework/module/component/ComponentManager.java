@@ -56,7 +56,7 @@ public class ComponentManager implements ApplicationListener<ContextRefreshedEve
 
     @SuppressWarnings("unchecked")
     @Nonnull
-    public <P extends ParentParam, R> Interceptor<P, R> getInterceptor(String name) {
+    public <P extends ModuleParam, R> Interceptor<P, R> getInterceptor(String name) {
         return (Interceptor<P, R>) this.find(name, interceptorMap);
     }
 
