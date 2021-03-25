@@ -1,5 +1,6 @@
 package person.billtsui.framework.common.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +20,8 @@ import java.util.List;
 public class JacksonUtil {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             //忽略未知的字段
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     private JacksonUtil() {
     }

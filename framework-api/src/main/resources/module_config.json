@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Hello",
+    "processors": [
+      {
+        "loaders": [
+          {
+            "name": "HotelLoader",
+            "appenders": [
+              {
+                "name": "HotelBaseInfoAppender",
+                "async": true
+              },
+              {
+                "name": "HotelAddressInfoAppender",
+                "async": true
+              },
+              {
+                "name": "HotelTrafficInfoAppender",
+                "async": true
+              },
+              {
+                "name": "HotelCommentInfoAppender",
+                "async": true
+              },
+              {
+                "name": "HotelPictureInfoAppender",
+                "async": true
+              }
+            ]
+          }
+        ],
+        "interceptors": []
+      }
+    ]
+  }
+]
