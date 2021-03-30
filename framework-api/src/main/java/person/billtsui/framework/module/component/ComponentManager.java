@@ -47,20 +47,32 @@ public class ComponentManager implements ApplicationListener<ContextRefreshedEve
         return (Appender<P, R>) this.find(name, appenderMap);
     }
 
+    public <P, R> List<Appender<P, R>> getAppenders(List<String> names) {
+        if (CollectionUtils.isEmpty(names)) {
+            return Collections.emptyList();
+        }
+        List<Appender<P, R>> result = new ArrayList<>();
+        for (String appenderName : names) {
+            result.add(getAppender(appenderName));
+        }
+
+        return result;
+    }
+
     @SuppressWarnings("unchecked")
     @Nonnull
     public <P, R> Loader<P, R> getLoader(String name) {
         return (Loader<P, R>) this.find(name, loaderMap);
     }
 
-    public <P, R> List<Loader<P, R>> getLoaders(List<LoaderConfig> loaderConfigList) {
-        if (CollectionUtils.isEmpty(loaderConfigList)) {
+    public <P, R> List<Loader<P, R>> getLoaders(List<String> names) {
+        if (CollectionUtils.isEmpty(names)) {
             return Collections.emptyList();
         }
 
         List<Loader<P, R>> result = new ArrayList<>();
-        for (LoaderConfig loaderConfig : loaderConfigList) {
-            result.add(getLoader(loaderConfig.getName()));
+        for (String loaderName : names) {
+            result.add(getLoader(loaderName));
         }
         return result;
     }

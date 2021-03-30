@@ -8,6 +8,7 @@ import person.billtsui.framework.module.Loader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author billtsui
@@ -45,6 +46,7 @@ public abstract class AbstractModuleServiceProcessor<P extends ModuleParam, R> i
 
             for (Loader<P, R> loader : loaders) {
                 responseEntity = this.excute(loader, param);
+
             }
 
             for (Interceptor<P, R> interceptor : interceptors) {
@@ -83,7 +85,8 @@ public abstract class AbstractModuleServiceProcessor<P extends ModuleParam, R> i
 
     List<Loader<P, R>> getLoaders(ProcessorConfig processorConfig) {
         if (processorConfig != null && CollectionUtils.isNotEmpty(processorConfig.getLoaders())) {
-            List<Loader<P, R>> loaders = componentManager.getLoaders(processorConfig.getLoaders());
+            List<String> names = processorConfig.getLoaders().stream().map(LoaderConfig::getName).collect(Collectors.toList());
+            List<Loader<P, R>> loaders = componentManager.getLoaders(names);
             return loaders;
         }
         return Collections.emptyList();
@@ -91,7 +94,9 @@ public abstract class AbstractModuleServiceProcessor<P extends ModuleParam, R> i
 
     private R excute(Loader<P, R> loader, P param) {
         R result = null;
-
+        result = loader.load(param);
+        if (result != null) {
+        }
         return result;
     }
 }
