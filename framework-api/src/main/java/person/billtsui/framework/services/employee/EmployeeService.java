@@ -1,6 +1,8 @@
 package person.billtsui.framework.services.employee;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import person.billtsui.framework.services.employee.getemployeeinfo.EmployeeProcessor;
 
 /**
  * @author billtsui
@@ -8,4 +10,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EmployeeService {
+    @Autowired
+    EmployeeProcessor employeeProcessor;
+
+    public void test(){
+    }
 }
