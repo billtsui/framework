@@ -1,5 +1,4 @@
-package person.billtsui.framework.module.component;
-
+package person.billtsui.framework.module.component.model;
 
 import lombok.Data;
 
@@ -10,9 +9,9 @@ import java.util.List;
  * @date 2021/3/22
  */
 @Data
-public class ProcessorConfig {
+public class AppenderConfig{
     private String name;
-    private List<LoaderConfig> loaders;
+    private boolean async;
     private List<String> interceptors;
-
+    private Long timeout;
 }

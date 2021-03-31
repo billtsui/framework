@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import person.billtsui.framework.common.utils.JacksonUtil;
+import person.billtsui.framework.module.component.model.ModuleConfig;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;

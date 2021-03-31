@@ -1,7 +1,4 @@
-package person.billtsui.framework.module.component;
-
-import lombok.Data;
-import person.billtsui.framework.module.Loader;
+package person.billtsui.framework.module.component.model;
 
 import java.util.List;
 
