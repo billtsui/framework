@@ -13,6 +13,32 @@ public class ConfiguredLoader<P, R> implements Loader<P, R> {
 
     private LoaderConfig loaderConfig;
 
+    public ConfiguredLoader(String module, Loader<P, R> loader) {
+        this.loader = loader;
+        this.loaderConfig = LoaderConfig.buildDefault(module, loader);
+    }
+
+    public ConfiguredLoader(Loader<P, R> loader, LoaderConfig loaderConfig) {
+        this.loader = loader;
+        this.loaderConfig = loaderConfig;
+    }
+
+    public Loader<P, R> getLoader() {
+        return loader;
+    }
+
+    public void setLoader(Loader<P, R> loader) {
+        this.loader = loader;
+    }
+
+    public LoaderConfig getLoaderConfig() {
+        return loaderConfig;
+    }
+
+    public void setLoaderConfig(LoaderConfig loaderConfig) {
+        this.loaderConfig = loaderConfig;
+    }
+
     @Override
     public R load(P param) {
         return this.loader.load(param);

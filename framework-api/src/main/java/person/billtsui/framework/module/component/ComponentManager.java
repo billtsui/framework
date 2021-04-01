@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import person.billtsui.framework.module.Appender;
 import person.billtsui.framework.module.Interceptor;
 import person.billtsui.framework.module.Loader;
+import person.billtsui.framework.module.component.model.LoaderConfig;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -75,6 +76,17 @@ public class ComponentManager implements ApplicationListener<ContextRefreshedEve
             result.add(getLoader(loaderName));
         }
         return result;
+    }
+
+    public <P, R> List<ConfiguredLoader<P, R>> getLoaderList(List<LoaderConfig> configs) {
+        if (CollectionUtils.isEmpty(configs)) {
+            return Collections.emptyList();
+        }
+        List<ConfiguredLoader<P, R>> loaderList = new ArrayList<>();
+        for (LoaderConfig config : configs) {
+            loaderList.add(new ConfiguredLoader<>(this.getLoader(config.getName()), config));
+        }
+        return loaderList;
     }
 
     @SuppressWarnings("unchecked")
