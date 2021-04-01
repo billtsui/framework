@@ -2,7 +2,6 @@ package person.billtsui.framework.module.component.model;
 
 
 import lombok.Data;
-import person.billtsui.framework.module.component.model.LoaderConfig;
 
 import java.util.List;
 

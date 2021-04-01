@@ -41,7 +41,6 @@ public class ModuleManager {
         if (MapUtils.isNotEmpty(moduleConfigMap)) {
             return moduleConfigMap.get(moduleName);
         }
-
         return null;
     }
 }
