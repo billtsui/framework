@@ -2,14 +2,20 @@ package person.billtsui.framework.module.component;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import person.billtsui.framework.module.Appender;
 import person.billtsui.framework.module.Interceptor;
 import person.billtsui.framework.module.Loader;
+import person.billtsui.framework.module.component.model.AppenderConfig;
 import person.billtsui.framework.module.component.model.LoaderConfig;
 import person.billtsui.framework.module.component.model.ModuleConfig;
 import person.billtsui.framework.module.component.model.ProcessorConfig;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,7 +54,7 @@ public abstract class AbstractModuleServiceProcessor<P extends ModuleParam, R> i
         }
 
         for (ConfiguredLoader<P, R> loader : loaders) {
-            responseEntity = this.excute(loader, param);
+            responseEntity = this.execute(loader, param);
         }
 
 
@@ -97,10 +103,13 @@ public abstract class AbstractModuleServiceProcessor<P extends ModuleParam, R> i
         throw new ComponentInitException("Fail to find loaders. module=" + module);
     }
 
-    private R excute(ConfiguredLoader<P, R> loader, P param) {
+    private R execute(ConfiguredLoader<P, R> loader, P param) {
         LoaderConfig loaderConfig = loader.getLoaderConfig();
         R result = this.executeLoader(loader, param);
-
+        if (null != result) {
+            this.executeSyncAppender(loaderConfig.getSyncAppenders(), param, result);
+            this.executeAsyncAppender(loaderConfig.getAsyncAppenders(), loaderConfig.getTimeout(), param, result);
+        }
         return result;
     }
 
@@ -114,5 +123,66 @@ public abstract class AbstractModuleServiceProcessor<P extends ModuleParam, R> i
         }
 
         return loader.load(param);
+    }
+
+    private void executeSyncAppender(List<AppenderConfig> configs, P param, R result) {
+        this.getSyncAppenderList(param.getModule(), configs)
+                .forEach(a -> this.executeAppender(a, param, result));
+    }
+
+    private void executeAsyncAppender(List<AppenderConfig> configs, Long timeout, P param, R responseEntity) {
+        List<ConfiguredAppender<P, R>> asyncAppenderList = this
+                .getAsyncAppenderList(param.getModule(), configs);
+//        if (CollectionUtils.isNotEmpty(asyncAppenderList)) {
+//            Supervisor supervisor = SuperviseBuilder.createSupervisor();
+//            asyncAppenderList.forEach(a ->
+//                    supervisor.submit(
+//                            SuperviseBuilder.build(p -> {
+//                                this.executeAppender(a, p, responseEntity);
+//                            }, param)
+//                    ));
+//
+//            timeout = ResultGuardUtils.resultOrDefault(timeout, DEFAULT_ASYNC_TIMEOUT);
+//            try {
+//                supervisor.supervise(timeout, TimeUnit.MILLISECONDS);
+//            } catch (InterruptedException e) {
+//                supervisor.cancelNotRunning();
+//                log.error("Supervise timeout. service provider={}, timeout={} ms.", this.getClass().getSimpleName(),
+//                        timeout);
+//            }
+//        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void executeAppender(ConfiguredAppender<P, R> appender, P param, R result) {
+        List<Interceptor<P, R>> appenderInterceptors = this
+                .getInterceptors(appender.getAppenderConfig().getInterceptors());
+        if (CollectionUtils.isNotEmpty(appenderInterceptors)) {
+            appenderInterceptors.forEach(i -> i.beforeProcess(param));
+            appender.append(param, result);
+            appenderInterceptors.forEach(i -> i.afterProcess(param, result));
+        } else {
+            appender.append(param, result);
+        }
+    }
+
+    private List<ConfiguredAppender<P, R>> getSyncAppenderList(String module, List<AppenderConfig> configs) {
+        return this.getAppenderList(module, configs, this::getDefaultSyncAppenderList);
+    }
+
+    private List<ConfiguredAppender<P, R>> getAsyncAppenderList(String module,List<AppenderConfig> configs) {
+        return this.getAppenderList(module, configs, this::getDefaultSyncAppenderList);
+    }
+
+    protected List<Appender<P, R>> getDefaultSyncAppenderList() {
+        return Collections.emptyList();
+    }
+
+    private List<ConfiguredAppender<P, R>> getAppenderList(String module, List<AppenderConfig> configs, Supplier<List<Appender<P, R>>> defaultSupplier) {
+        if (CollectionUtils.isNotEmpty(configs)) {
+            return componentManager.getAppenderList(configs);
+        } else {
+            return defaultSupplier.get().stream().map(appender -> new ConfiguredAppender<>(module, appender)).collect(Collectors.toList());
+        }
     }
 }

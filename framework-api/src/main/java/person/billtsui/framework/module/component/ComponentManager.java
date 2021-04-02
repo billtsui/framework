@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import person.billtsui.framework.module.Appender;
 import person.billtsui.framework.module.Interceptor;
 import person.billtsui.framework.module.Loader;
+import person.billtsui.framework.module.component.model.AppenderConfig;
 import person.billtsui.framework.module.component.model.LoaderConfig;
 
 import javax.annotation.Nonnull;
@@ -58,6 +59,17 @@ public class ComponentManager implements ApplicationListener<ContextRefreshedEve
         }
 
         return result;
+    }
+
+    public <P, R> List<ConfiguredAppender<P, R>> getAppenderList(List<AppenderConfig> configs) {
+        if (CollectionUtils.isEmpty(configs)) {
+            return Collections.emptyList();
+        }
+        List<ConfiguredAppender<P, R>> appenderList = new ArrayList<>();
+        for (AppenderConfig config : configs) {
+            appenderList.add(new ConfiguredAppender<>(this.getAppender(config.getName()), config));
+        }
+        return appenderList;
     }
 
     @SuppressWarnings("unchecked")

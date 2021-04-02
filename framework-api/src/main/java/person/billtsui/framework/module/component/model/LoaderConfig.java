@@ -3,6 +3,8 @@ package person.billtsui.framework.module.component.model;
 import person.billtsui.framework.module.Loader;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author billtsui
@@ -71,5 +73,17 @@ public class LoaderConfig {
 
     public void setTimeout(Long timeout) {
         this.timeout = timeout;
+    }
+
+    public List<AppenderConfig> getAsyncAppenders() {
+        return this.getAppenders(AppenderConfig::isAsync);
+    }
+
+    public List<AppenderConfig> getSyncAppenders() {
+        return this.getAppenders(appenderConfig -> !appenderConfig.isAsync());
+    }
+
+    private List<AppenderConfig> getAppenders(Predicate<AppenderConfig> predicate) {
+        return appenders == null ? null : appenders.stream().filter(predicate).collect(Collectors.toList());
     }
 }
