@@ -14,5 +14,4 @@ public class ProcessorConfig {
     private String name;
     private List<LoaderConfig> loaders;
     private List<String> interceptors;
-
 }

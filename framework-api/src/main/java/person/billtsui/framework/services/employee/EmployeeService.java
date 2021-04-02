@@ -2,7 +2,10 @@ package person.billtsui.framework.services.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import person.billtsui.framework.services.employee.getemployeeinfo.EmployeeProcessor;
+import person.billtsui.framework.services.employee.getemployeeinfo.EmployeeInfoParam;
+import person.billtsui.framework.services.employee.getemployeeinfo.model.GetEmployeeInfoRequest;
+import person.billtsui.framework.services.employee.getemployeeinfo.model.GetEmployeeInfoResponse;
+import person.billtsui.framework.services.employee.getemployeeinfo.processor.EmployeeProcessor;
 
 /**
  * @author billtsui
@@ -13,6 +16,10 @@ public class EmployeeService {
     @Autowired
     EmployeeProcessor employeeProcessor;
 
-    public void test(){
+    public GetEmployeeInfoResponse getEmployeeInfo (GetEmployeeInfoRequest request){
+        EmployeeInfoParam employeeInfoParam = new EmployeeInfoParam();
+        employeeInfoParam.setModule("Employee");
+
+        return employeeProcessor.handle(employeeInfoParam);
     }
 }

@@ -9,4 +9,6 @@ import lombok.Data;
 @Data
 public class Employee {
     private Integer empNo;
+    private String name;
+    private int age;
 }
