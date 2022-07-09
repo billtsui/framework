@@ -12,3 +12,7 @@ target
 # Idea
 .idea
 *.iml
+.settings
+.project
+framework-api
+framework-common

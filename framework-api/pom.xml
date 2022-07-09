@@ -14,7 +14,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <spring.boot.version>2.3.9.RELEASE</spring.boot.version>
+        <spring.boot.version>2.7.0</spring.boot.version>
     </properties>
 
     <dependencies>
@@ -46,13 +46,4 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
